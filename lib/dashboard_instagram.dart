@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'story_slider.dart';
-import 'post_card.dart';
+import 'components/story_slider.dart';
+import 'components/post_card.dart';
 
 class DashboardInstagram extends StatelessWidget {
   const DashboardInstagram({super.key});

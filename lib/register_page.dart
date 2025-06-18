@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'login_page.dart';
-import 'extensions.dart';
-import 'temp_user_storage.dart';
+import 'models/user.dart';
+import 'storage/user_storage.dart';
+import 'components/extensions.dart';
+import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,9 +13,9 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
-  final _fullNameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
   bool _isPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
@@ -22,21 +23,27 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     _emailController.dispose();
-    _fullNameController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
+  // Sign up function logic
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
-    TempUserStorage.email = _emailController.text.trim();
-    TempUserStorage.fullName = _fullNameController.text.trim();
-    TempUserStorage.username = _usernameController.text.trim();
-    TempUserStorage.password = _passwordController.text.trim();
+    // Buat Instance baru untuk User
+    final User newUser = User(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      email: _emailController.text.trim(),
+      username: _usernameController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    UserStorage.addUser(newUser);
 
     try {
       await Future.delayed(const Duration(seconds: 1));
@@ -70,7 +77,6 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // Responsive design based on screen width
             final isSmallScreen = constraints.maxWidth < 600;
 
             return Center(
@@ -107,23 +113,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             fontSize: 16,
                             color: Colors.grey[600],
                             fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Facebook signup button
-                        SizedBox(
-                          height: 45,
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.facebook,
-                              color: Colors.white,
-                            ),
-                            label: const Text('Log in with Facebook'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF385185),
-                            ),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -180,31 +169,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Full Name field
-                        TextFormField(
-                          controller: _fullNameController,
-                          decoration: InputDecoration(
-                            hintText: 'Full Name',
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 15,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your full name';
                             }
                             return null;
                           },
@@ -269,6 +233,51 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Confirm Password field
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                            hintText: 'Confirm Password',
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 15,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide.none,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value != _passwordController.text) {
+                              return 'Passwords do not match';
                             }
                             if (value.length < 6) {
                               return 'Password must be at least 6 characters';

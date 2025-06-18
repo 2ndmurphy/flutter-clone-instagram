@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'extensions.dart';
+import 'components/extensions.dart';
 import 'register_page.dart';
-import 'temp_user_storage.dart';
-import 'package:login_register_instagram/dashboard/dashboard_instagram.dart';
+import 'dashboard_instagram.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,20 +31,18 @@ class _LoginPageState extends State<LoginPage> {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
-    // User data di hardcoded
-    // const hardcodedUsers = {
-    //   'user@example.com': 'password123',
-    //   'murphy@genz.com': 'genzpower',
-    //   'test@insta.com': 'instapass',
-    // };
+    const hardCodedUsers = {
+      'user@example.com': 'password123',
+      'murphy@genz.com': 'genzpower',
+      'test@insta.com': 'instapass',
+    };
 
     setState(() => _isLoading = true);
 
     try {
       await Future.delayed(const Duration(seconds: 2));
 
-      if (email == TempUserStorage.email &&
-          password == TempUserStorage.password) {
+      if (hardCodedUsers.containsKey(email) && hardCodedUsers[email] == password) {
         if (mounted) {
           Navigator.pushReplacement(
             context,

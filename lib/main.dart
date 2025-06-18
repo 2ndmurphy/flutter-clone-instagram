@@ -20,15 +20,6 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF0095F6),
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ),
-        ),
       ),
       home: const LoginPage(),
     );

@@ -8,9 +8,6 @@ class StorySlider extends StatelessWidget {
     return Container(
       height: 100,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
-      ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 10,
@@ -46,7 +43,13 @@ class StorySlider extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text('User ${index + 1}', style: const TextStyle(fontSize: 12)),
+          if (index == 0)
+            const Text(
+              'Your Story',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54),
+            )
+          else
+            Text('User ${index + 1}', style: const TextStyle(fontSize: 12, color: Colors.black54)),
         ],
       ),
     );

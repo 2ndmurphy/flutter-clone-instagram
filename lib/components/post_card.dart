@@ -30,8 +30,8 @@ class PostCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey, width: 0.5),
+              shape: BoxShape.rectangle,
+              // border: Border.all(color: Colors.grey, width: 0.5),
             ),
             child: ClipOval(
               child: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:login_register_instagram/login_page.dart';
+import 'login_page.dart';
+import 'dashboard_instagram.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: const LoginPage(),
+      home: const DashboardInstagram(),
     );
   }
 }

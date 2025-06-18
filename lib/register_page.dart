@@ -71,6 +71,27 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  // Validation methods
+  String? validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter your email or username';
+    }
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,12 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderSide: BorderSide.none,
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            return null;
-                          },
+                          validator: validateEmail,
                         ),
                         const SizedBox(height: 12),
 
@@ -230,15 +246,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a password';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
+                          validator: validatePassword,
                         ),
                         const SizedBox(height: 20),
 

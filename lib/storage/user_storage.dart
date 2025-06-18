@@ -10,4 +10,11 @@ class UserStorage {
   static List<User> getUsers() {
     return _users;
   }
+
+  static User? findUserByEmail(String email) {
+    return _users.firstWhere(
+      (u) => u.email == email,
+      orElse: () => throw StateError('No user found with email $email'),
+    );
+  }
 }

@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'components/extensions.dart';
 import 'register_page.dart';
 import 'dashboard_instagram.dart';
+import 'storage/user_storage.dart';
+import 'components/extensions.dart';
+import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,24 +32,20 @@ class _LoginPageState extends State<LoginPage> {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
 
-    const hardCodedUsers = {
-      'user@example.com': 'password123',
-      'murphy@genz.com': 'genzpower',
-      'test@insta.com': 'instapass',
-    };
-
     setState(() => _isLoading = true);
+
+    final user = UserStorage.findUserByEmail(email);
 
     try {
       await Future.delayed(const Duration(seconds: 2));
 
-      if (hardCodedUsers.containsKey(email) && hardCodedUsers[email] == password) {
+      if (user != null && user.password == password) {
         if (mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const DashboardInstagram()),
           );
-          // context.showSnackBar('Login successful!');
+          context.showSnackBar('Login successful!');
         }
         return;
       } else {

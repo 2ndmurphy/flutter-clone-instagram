@@ -19,6 +19,8 @@ class StorySlider extends StatelessWidget {
   }
 
   Widget _buildStoryItem(int index) {
+    final imageUrl = 'https://randomuser.me/api/portraits/men/${index + 1}.jpg';
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -26,30 +28,52 @@ class StorySlider extends StatelessWidget {
           Container(
             width: 60,
             height: 60,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey, width: 1),
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF833AB4), // purple
+                  Color(0xFFF77737), // orange
+                  Color(0xFFE1306C), // pink
+                  Color(0xFFC13584), // magenta
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-            child: ClipOval(
+            child: Padding(
+              padding: const EdgeInsets.all(3), // border thickness
               child: Container(
-                color: Colors.grey[300],
-                child: const Center(
-                  child: Text(
-                    'IMG',
-                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white, // background inner
+                ),
+                child: ClipOval(
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(
+                            Icons.person,
+                            color: Colors.black54,
+                          ),
+                        ),
                   ),
                 ),
               ),
             ),
           ),
           const SizedBox(height: 4),
-          if (index == 0)
-            const Text(
-              'Your Story',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black54),
-            )
-          else
-            Text('User ${index + 1}', style: const TextStyle(fontSize: 12, color: Colors.black54)),
+          Text(
+            index == 0 ? 'Your Story' : 'User ${index + 1}',
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.black54,
+            ),
+          ),
         ],
       ),
     );

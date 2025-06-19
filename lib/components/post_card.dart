@@ -22,6 +22,9 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _buildPostHeader() {
+    final imageUrl =
+        'https://randomuser.me/api/portraits/men/${postIndex + 1}.jpg';
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -36,10 +39,18 @@ class PostCard extends StatelessWidget {
             child: ClipOval(
               child: Container(
                 color: Colors.grey[300],
-                child: const Center(
-                  child: Text(
-                    'IMG',
-                    style: TextStyle(color: Colors.black54, fontSize: 10),
+                child: Center(
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(
+                            Icons.person,
+                            color: Colors.black54,
+                          ),
+                        ),
                   ),
                 ),
               ),
@@ -56,14 +67,21 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _buildPostImage() {
+    final imageUrl = 'https://picsum.photos/seed/${postIndex + 10}/300/300';
+
     return Container(
       height: 300,
       width: double.infinity,
       color: Colors.grey[200],
       child: Center(
-        child: Text(
-          'Post Image ${postIndex + 1}',
-          style: const TextStyle(color: Colors.black54),
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (context, error, stackTrace) => Container(
+                color: Colors.grey[300],
+                child: const Icon(Icons.image, color: Colors.black54),
+              ),
         ),
       ),
     );
